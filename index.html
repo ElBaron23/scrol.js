@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Watch | عرض تفاعلي</title>
+    <!-- استدعاء ملف التنسيقات الخاص بالمكتبة -->
+    <link rel="stylesheet" href="scrol.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <style>
+        @font-face {
+            font-family: 'Hayah';
+            src: url('Hayah.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Hayah', sans-serif;
+            background-color: #050505;
+            color: #fff;
+        }
+
+        /* تنسيقات الأقسام للعرض الإبداعي */
+        .scrol-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            padding: 5%;
+            box-sizing: border-box;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .content-left, .content-right {
+            flex: 1;
+            padding: 20px;
+            z-index: 5;
+        }
+
+        .content-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .watch-img {
+            max-width: 100%;
+            border-radius: 19px;
+            max-height: 80vh;
+            filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: normal;
+            margin: 0 0 20px 0;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 3.5rem;
+            font-weight: normal;
+            margin: 0 0 20px 0;
+            color: #e2e8f0;
+        }
+
+        p {
+            font-size: 1.5rem;
+            color: #cbd5e1;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        .btn-buy {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-weight: normal;
+            color: #fff;
+            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-buy:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 8, 68, 0.4);
+        }
+
+        /* خلفيات الأقسام */
+        #hero { background: radial-gradient(circle at right, #1e3a8a 0%, #050505 60%); }
+        #features { background: radial-gradient(circle at left, #4c1d95 0%, #050505 60%); }
+        #health { background: radial-gradient(circle at center, #065f46 0%, #050505 60%); }
+        #cta { background: #050505; text-align: center; flex-direction: column; }
+        #cta .content-left { text-align: center; }
+
+        .hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* لوحة التحكم الحية */
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 9999;
+            background: rgba(0,0,0,0.6);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .controls h3 { 
+            margin: 0 0 10px 0; 
+            font-size: 1.1rem;
+            font-weight: normal;
+            border-bottom: 1px solid rgba(255,255,255,0.2); 
+            padding-bottom: 5px; 
+        }
+        .controls select {
+            width: 100%;
+            padding: 8px;
+            background: #2c3e50;
+            color: white;
+            border: 1px solid #34495e;
+            border-radius: 5px;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* التصميم المتجاوب للهواتف */
+        @media (max-width: 768px) {
+            .scrol-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            #features {
+                flex-direction: column-reverse;
+            }
+            h1 {
+                font-size: 3rem;
+            }
+            h2 {
+                font-size: 2.2rem;
+            }
+            p {
+                font-size: 1.2rem;
+            }
+            .watch-img {
+                max-height: 40vh;
+            }
+            .controls {
+                width: 85%;
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+            }
+            #cta h1 {
+                font-size: 2.5rem !important;
+            }
+            .btn-buy {
+                font-size: 1.2rem !important;
+                padding: 12px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- لوحة التحكم الحية -->
+    <div class="controls">
+        <h3>اختر التأثير </h3>
+        <select id="effectSelector">
+            <option value="slide">تقليدي (Slide)</option>
+            <option value="horizontal">أفقي (Horizontal)</option>
+            <option value="blur">ضبابي (Blur)</option>
+            <option value="fold">طي ورقي (Fold)</option>
+            <option value="cards">سقوط بطاقات (Cards)</option>
+            <option value="cube" selected>مكعب ثلاثي الأبعاد (Cube)</option>
+            <option value="flip">قلب الشاشة (Flip)</option>
+            <option value="scale-rotate">دوران وتصغير (Scale-Rotate)</option>
+            <option value="zoom">تكبير وتصغير (Zoom)</option>
+            <option value="fade">تلاشي سلس (Fade)</option>
+            <option value="bounce">وثب مرن (Bounce)</option>
+            <option value="swing">تأرجح 3D (Swing)</option>
+            <option value="spin-out">دوران لولبي (Spin-Out)</option>
+            <option value="door">فتح الباب (Door)</option>
+        </select>
+    </div>
+
+    <!-- الوعاء الرئيسي للأقسام -->
+    <div id="main-container">
+        
+        <!-- القسم الأول: الواجهة -->
+        <section id="hero">
+            <div class="content-left">
+                <h1>Nexus Watch</h1>
+                <p>المستقبل أصبح بين يديك. أول ساعة ذكية بواجهة هولوجرامية متطورة وتصميم ينبض بالذكاء.</p>
+                <a href="#cta" class="btn-buy">اكتشف المزيد</a>
+            </div>
+            <div class="content-right">
+                <img src="watch.png" alt="Nexus Watch" class="watch-img">
+            </div>
+            <div class="hint">مرر للأسفل لاكتشاف الميزات</div>
+        </section>
+        
+        <!-- القسم الثاني: الميزات -->
+        <section id="features">
+            <div class="content-right">
+                <img src="watch.png" alt="Nexus Watch" class="watch-img" style="transform: scale(1.2);">
+            </div>
+            <div class="content-left">
+                <h2>هولوجرام تفاعلي</h2>
+                <p>شاشة تنبض بالحياة تخرج عن إطار الزجاج. تفاعل مع إشعاراتك، تطبيقاتك، والخرائط بشكل ثلاثي الأبعاد مجسم يعوم في الهواء.</p>
+            </div>
+        </section>
+        
+        <!-- القسم الثالث: الصحة -->
+        <section id="health">
+            <div class="content-left">
+                <h2>صحتك، بدقة النانو</h2>
+                <p>مستشعرات كمومية تقيس معدل نبضك، نسبة الأكسجين، وتقرأ حتى مستويات التوتر في ثوانٍ. ابق متصلاً بجسدك كما لم تفعل من قبل.</p>
+            </div>
+            <div class="content-right">
+                <img src="watch.png" alt="Nexus Watch Health" class="watch-img" style="filter: hue-rotate(90deg) drop-shadow(0 0 30px rgba(16, 185, 129, 0.8));">
+            </div>
+        </section>
+        
+        <!-- القسم الرابع: الشراء -->
+        <section id="cta">
+            <div class="content-left" style="max-width: 800px; margin: 0 auto;">
+                <h1 style="font-size: 4rem;">ارتقِ بأسلوب حياتك</h1>
+                <p style="text-align: center; margin: 0 auto;">بطارية تدوم لـ 30 يوماً، مقاومة كاملة للماء، ذكاء اصطناعي مدمج. كل هذا وأكثر الآن متوفر للطلب المسبق.</p>
+                <button class="btn-buy" style="margin-top: 40px; font-size: 2rem;">اطلبها الآن - $499</button>
+            </div>
+        </section>
+        
+    </div>
+
+    <!-- استدعاء ملف المكتبة البرمجي -->
+    <script src="scrol.js"></script>
+    
+    <!-- تهيئة المكتبة (Initialization) -->
+    <script>
+        // بمجرد تحميل الصفحة، نقوم بتشغيل المكتبة
+        document.addEventListener('DOMContentLoaded', () => {
+            // الحصول على القيمة الأولية من القائمة المنسدلة
+            const initialEffect = document.getElementById('effectSelector').value;
+
+            // ننشئ نسخة جديدة من المكتبة مع تحديد الوعاء الرئيسي ونوع التأثير
+            const myScrol = new Scrol({
+                container: '#main-container', // الوعاء الذي يحمل الأقسام
+                selector: 'section',          // العناصر التي تعتبر أقساماً
+                effect: initialEffect,        // استخدام التأثير المختار
+                duration: 800                 // مدة الحركة بالميلي ثانية
+            });
+            
+            // إضافة مستمع لحدث التغيير في القائمة المنسدلة لتغيير التأثير ديناميكياً
+            document.getElementById('effectSelector').addEventListener('change', function(e) {
+                // يكفي فقط تغيير الخاصية data-effect على الوعاء لتقوم CSS بالباقي
+                document.getElementById('main-container').setAttribute('data-effect', e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>

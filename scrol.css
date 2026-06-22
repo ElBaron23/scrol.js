@@ -1,0 +1,339 @@
+/* إخفاء شريط التمرير الافتراضي من الصفحة لضمان عمل المكتبة بشكل صحيح */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* يمنع ظهور شريط التمرير (Scrollbar) */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* تنسيق الوعاء الرئيسي ليأخذ حجم الشاشة بالكامل */
+.scrol-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* تنسيق عام لكل قسم ليأخذ 100% من العرض والطول ويكون موقعه مطلقاً */
+.scrol-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* إعداد الحركة الافتراضية (الانزلاق) */
+    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+    opacity: 0;
+    /* بشكل افتراضي يكون القسم أسفل الشاشة (غير مرئي) */
+    transform: translateY(100%);
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 1. تأثير الانزلاق (Slide) - وهو التأثير الافتراضي */
+/* ----------------------------------------------------- */
+
+/* القسم النشط (المرئي حالياً) في حالة الانزلاق */
+.scrol-container[data-effect="slide"] .scrol-section.scrol-active {
+    opacity: 1;
+    transform: translateY(0); /* يعود لمكانه الطبيعي في الشاشة */
+    z-index: 2;
+}
+
+/* القسم السابق (الذي تم تجاوزه للأعلى) في حالة الانزلاق */
+.scrol-container[data-effect="slide"] .scrol-section.scrol-up {
+    transform: translateY(-100%); /* يختفي في أعلى الشاشة */
+    opacity: 0;
+}
+
+/* ----------------------------------------------------- */
+/* 2. تأثير التلاشي (Fade) */
+/* ----------------------------------------------------- */
+
+.scrol-container[data-effect="fade"] .scrol-section {
+    transform: translateY(0); /* لا يوجد تغيير في الموقع (لا ينزلق) */
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* القسم النشط يظهر بالتلاشي */
+.scrol-container[data-effect="fade"] .scrol-section.scrol-active {
+    opacity: 1;
+    z-index: 2;
+}
+
+/* أي قسم غير نشط يكون مخفياً بالكامل */
+.scrol-container[data-effect="fade"] .scrol-section:not(.scrol-active) {
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 3. تأثير التكبير/التصغير (Zoom) */
+/* ----------------------------------------------------- */
+
+.scrol-container[data-effect="zoom"] .scrol-section {
+    transform: scale(0.8); /* بشكل افتراضي يكون مصغراً قليلاً */
+    opacity: 0;
+    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+}
+
+/* القسم النشط يعود لحجمه الطبيعي ويظهر */
+.scrol-container[data-effect="zoom"] .scrol-section.scrol-active {
+    transform: scale(1);
+    opacity: 1;
+    z-index: 2;
+}
+
+/* القسم السابق (للمؤثر الحركي) يكبر ويختفي */
+.scrol-container[data-effect="zoom"] .scrol-section.scrol-up {
+    transform: scale(1.2);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 4. تأثير القلب ثلاثي الأبعاد (Flip) */
+/* ----------------------------------------------------- */
+.scrol-container[data-effect="flip"] {
+    perspective: 1500px;
+}
+.scrol-container[data-effect="flip"] .scrol-section {
+    transform: rotateX(-90deg);
+    transform-origin: 50% 0; /* الدوران من أعلى */
+    opacity: 0;
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 1s ease;
+}
+.scrol-container[data-effect="flip"] .scrol-section.scrol-active {
+    transform: rotateX(0deg);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="flip"] .scrol-section.scrol-up {
+    transform: rotateX(90deg);
+    transform-origin: 50% 100%; /* الدوران من أسفل */
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 5. تأثير المكعب (Cube) */
+/* ----------------------------------------------------- */
+.scrol-container[data-effect="cube"] {
+    perspective: 1500px;
+}
+.scrol-container[data-effect="cube"] .scrol-section {
+    transform: translateZ(-50vh) rotateX(-90deg);
+    opacity: 0;
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 1s ease;
+}
+.scrol-container[data-effect="cube"] .scrol-section.scrol-active {
+    transform: translateZ(0) rotateX(0);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="cube"] .scrol-section.scrol-up {
+    transform: translateZ(-50vh) rotateX(90deg);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 6. تأثير الدوران والتصغير (Scale-Rotate) */
+/* ----------------------------------------------------- */
+.scrol-container[data-effect="scale-rotate"] .scrol-section {
+    transform: scale(0) rotate(180deg);
+    opacity: 0;
+    transition: transform 1s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 1s ease;
+}
+.scrol-container[data-effect="scale-rotate"] .scrol-section.scrol-active {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="scale-rotate"] .scrol-section.scrol-up {
+    transform: scale(2) rotate(-180deg);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 7. التأثير الأفقي (Horizontal) */
+/* ----------------------------------------------------- */
+.scrol-container[data-effect="horizontal"] .scrol-section {
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.8s;
+}
+.scrol-container[data-effect="horizontal"] .scrol-section.scrol-active {
+    transform: translateX(0);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="horizontal"] .scrol-section.scrol-up {
+    transform: translateX(-100%);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 8. تأثير الضبابية المجنون (Crazy Blur) */
+/* ----------------------------------------------------- */
+.scrol-container[data-effect="blur"] .scrol-section {
+    transform: scale(1.5);
+    filter: blur(20px);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.scrol-container[data-effect="blur"] .scrol-section.scrol-active {
+    transform: scale(1);
+    filter: blur(0px);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="blur"] .scrol-section.scrol-up {
+    transform: scale(0.5);
+    filter: blur(20px);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 9. تأثير الطي الورقي (Fold) */
+/* ----------------------------------------------------- */
+.scrol-container[data-effect="fold"] {
+    perspective: 2000px;
+}
+.scrol-container[data-effect="fold"] .scrol-section {
+    transform: rotateX(-45deg) translateY(50%);
+    transform-origin: 50% 100%;
+    opacity: 0;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s;
+}
+.scrol-container[data-effect="fold"] .scrol-section.scrol-active {
+    transform: rotateX(0deg) translateY(0);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="fold"] .scrol-section.scrol-up {
+    transform: rotateX(45deg) translateY(-50%);
+    transform-origin: 50% 0%;
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 10. تأثير سقوط البطاقات (Cards Fall) */
+/* ----------------------------------------------------- */
+.scrol-container[data-effect="cards"] {
+    perspective: 1000px;
+}
+.scrol-container[data-effect="cards"] .scrol-section {
+    transform: translateZ(-300px) translateY(100vh);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.scrol-container[data-effect="cards"] .scrol-section.scrol-active {
+    transform: translateZ(0) translateY(0);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="cards"] .scrol-section.scrol-up {
+    transform: translateZ(-300px) translateY(-100vh);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 11. تأثير الوثب المَرِن (Bounce) */
+/* ----------------------------------------------------- */
+/* يعطي إحساساً بالمرونة والارتداد عند دخول القسم الجديد */
+.scrol-container[data-effect="bounce"] .scrol-section {
+    transform: translateY(100vh);
+    opacity: 0;
+    transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.5s;
+}
+.scrol-container[data-effect="bounce"] .scrol-section.scrol-active {
+    transform: translateY(0);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="bounce"] .scrol-section.scrol-up {
+    transform: translateY(-100vh);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 12. تأثير التأرجح ثلاثي الأبعاد (Swing) */
+/* ----------------------------------------------------- */
+/* القسم يتأرجح وكأنه معلق من الأعلى */
+.scrol-container[data-effect="swing"] {
+    perspective: 1500px;
+}
+.scrol-container[data-effect="swing"] .scrol-section {
+    transform: rotateX(90deg);
+    transform-origin: top center;
+    opacity: 0;
+    transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s;
+}
+.scrol-container[data-effect="swing"] .scrol-section.scrol-active {
+    transform: rotateX(0deg);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="swing"] .scrol-section.scrol-up {
+    transform: rotateX(-90deg);
+    transform-origin: bottom center;
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 13. تأثير الدوران اللولبي المجنون (Spin-Out) */
+/* ----------------------------------------------------- */
+/* دوران سريع جداً مع تصغير/تكبير وضبابية لونية */
+.scrol-container[data-effect="spin-out"] .scrol-section {
+    transform: scale(0.1) rotate(720deg);
+    opacity: 0;
+    filter: blur(10px);
+    transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.scrol-container[data-effect="spin-out"] .scrol-section.scrol-active {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: blur(0px);
+    z-index: 2;
+}
+.scrol-container[data-effect="spin-out"] .scrol-section.scrol-up {
+    transform: scale(2) rotate(-720deg);
+    opacity: 0;
+    filter: blur(10px);
+    z-index: 1;
+}
+
+/* ----------------------------------------------------- */
+/* 14. تأثير الباب المفتوح (Door) */
+/* ----------------------------------------------------- */
+/* حركة تحاكي فتح الباب من اليمين أو اليسار لدخول القسم */
+.scrol-container[data-effect="door"] {
+    perspective: 2000px;
+}
+.scrol-container[data-effect="door"] .scrol-section {
+    transform: rotateY(-90deg);
+    transform-origin: left center;
+    opacity: 0;
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.8s;
+}
+.scrol-container[data-effect="door"] .scrol-section.scrol-active {
+    transform: rotateY(0deg);
+    opacity: 1;
+    z-index: 2;
+}
+.scrol-container[data-effect="door"] .scrol-section.scrol-up {
+    transform: rotateY(90deg);
+    transform-origin: right center;
+    opacity: 0;
+    z-index: 1;
+}

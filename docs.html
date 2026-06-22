@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مستندات مكتبة Scrol.js</title>
+    <!-- استدعاء ملف التنسيقات الخاص بالمكتبة -->
+    <link rel="stylesheet" href="scrol.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @font-face {
+            font-family: 'Hayah';
+            src: url('Hayah.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --accent-color: #3b82f6;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --code-bg: #1e293b;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Hayah', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* تنسيقات الأقسام */
+        .scrol-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5%;
+            box-sizing: border-box;
+            background-image: radial-gradient(circle at top right, #1e3a8a 0%, transparent 50%),
+                              radial-gradient(circle at bottom left, #3b0764 0%, transparent 50%);
+        }
+
+        .content-box {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 900px;
+            width: 100%;
+            text-align: right;
+        }
+
+        /* القسم الأول استثناء ليكون في المنتصف */
+        #section-intro .content-box {
+            text-align: center;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: normal;
+            margin: 0;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: normal;
+            color: #e2e8f0;
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        p { font-size: 1.2rem; color: #cbd5e1; line-height: 1.8; }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: normal;
+            font-size: 1.2rem;
+            margin-top: 30px;
+            transition: transform 0.3s ease;
+            border: none;
+        }
+
+        .btn:hover { transform: scale(1.05); }
+
+        .code-block {
+            background-color: var(--code-bg);
+            padding: 20px;
+            border-radius: 10px;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #a78bfa;
+            margin-top: 15px;
+        }
+
+        .tag { color: #f472b6; }
+        .attr { color: #60a5fa; }
+        .val { color: #34d399; }
+        .comment { color: #64748b; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .feature-card h3 { color: #38bdf8; margin-top: 0; font-weight: normal; }
+
+        .hint {
+            position: absolute;
+            bottom: 30px;
+            font-size: 1.2rem;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* لوحة التحكم الجانبية */
+        .page-indicator {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: 0.3s;
+        }
+        .dot.active {
+            background: var(--accent-color);
+            transform: scale(1.5);
+        }
+
+        /* تنسيقات بطاقة المطور */
+        .author-card {
+            background-color: #151b2b;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            margin: 0 auto;
+        }
+
+        .author-avatar-wrapper {
+            display: inline-block;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+            margin-bottom: 20px;
+        }
+        .author-avatar-wrapper img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            border: 4px solid #151b2b;
+        }
+
+        .author-name {
+            font-family: sans-serif; /* لاسم المطور الإنجليزي */
+            font-size: 2rem;
+            font-weight: normal;
+            color: #fff;
+            margin: 0 0 5px 0;
+            letter-spacing: 1px;
+        }
+
+        .author-title {
+            color: #00f2fe;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+
+        .author-desc {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .social-btn:hover {
+            background-color: #00f2fe;
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
+        }
+
+        /* التصميم المتجاوب للهواتف */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 1.8rem; }
+            .subtitle { font-size: 1.2rem; }
+            p { font-size: 1rem; }
+            .content-box {
+                padding: 20px;
+                width: 90%;
+            }
+            .features-grid {
+                grid-template-columns: 1fr !important;
+                gap: 15px;
+            }
+            .code-block {
+                font-size: 0.9rem;
+                overflow-x: auto;
+            }
+            .author-card {
+                padding: 25px 20px;
+                width: 90%;
+            }
+            .author-avatar-wrapper img {
+                width: 100px;
+                height: 100px;
+            }
+            .author-name { font-size: 1.5rem; }
+            .author-title { font-size: 1rem; margin-bottom: 10px; }
+            .author-desc { font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
+            .page-indicator {
+                right: 10px;
+                transform: scale(0.8) translateY(-60%);
+            }
+            .social-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- مؤشرات الصفحات الوهمية للزينة -->
+    <div class="page-indicator">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+
+    <!-- الوعاء الرئيسي للأقسام -->
+    <div id="main-container">
+
+        <!-- القسم 1: المقدمة -->
+        <section class="scrol-section" id="section-intro">
+            <div class="content-box">
+                <h1>Scrol.js Docs</h1>
+                <div class="subtitle">التوثيق الرسمي.. مدمج في المكتبة نفسها!</div>
+                <p>نعم، أنت الآن تقرأ هذا التوثيق باستخدام مكتبة Scrol.js بتأثير Slide.</p>
+                <a href="index.html" class="btn">شاهد التجربة الحية (Nexus Watch)</a>
+            </div>
+            <div class="hint">مرر للأسفل لقراءة التوثيق</div>
+        </section>
+
+        <!-- القسم 2: المميزات -->
+        <section class="scrol-section">
+            <div class="content-box">
+                <h2>المميزات الأساسية</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>بساطة التكوين</h3>
+                        <p>عناصر HTML اعتيادية تتحول لسحر بمجرد استدعاء المكتبة.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>تأثيرات مجنونة 3D</h3>
+                        <p>Cube, Flip, Scale-Rotate, Fade, Slide... كلها جاهزة للاستخدام.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>دعم كامل</h3>
+                        <p>عجلة الفأرة، أسهم الكيبورد، والسحب باللمس على الجوال.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>خفيف وسريع</h3>
+                        <p>مكتوب بـ Vanilla JS النقي بدون أي مكاتب خارجية (مثل jQuery).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- القسم 3: الاستخدام 1 -->
+        <section class="scrol-section">
+            <div class="content-box">
+                <h2>الخطوة الأولى: الاستدعاء</h2>
+                <p>قم بتضمين ملفات المكتبة في صفحتك، واحرص على وضع التنسيقات في قسم `head` والجافاسكريبت قبل نهاية `body`.</p>
+                
+                <div class="code-block">
+<span class="comment">&lt;!-- في الـ Head --&gt;</span><br>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span> <span class="attr">href</span>=<span class="val">"scrol.css"</span><span class="tag">&gt;</span><br>
+<br>
+<span class="comment">&lt;!-- قبل نهاية الـ Body --&gt;</span><br>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"scrol.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- القسم 4: الاستخدام 2 -->
+        <section class="scrol-section">
+            <div class="content-box">
+                <h2>الخطوة الثانية: هيكل الصفحة</h2>
+                <p>قم بإنشاء وعاء رئيسي وبداخله مجموعة من الأقسام `section`.</p>
+                
+                <div class="code-block">
+<span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="val">"main-container"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;section&gt;</span> المشهد الأول <span class="tag">&lt;/section&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;section&gt;</span> المشهد الثاني <span class="tag">&lt;/section&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;section&gt;</span> المشهد الثالث <span class="tag">&lt;/section&gt;</span><br>
+<span class="tag">&lt;/div&gt;</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- القسم 5: الاستخدام 3 -->
+        <section class="scrol-section">
+            <div class="content-box">
+                <h2>الخطوة الثالثة: التفعيل</h2>
+                <p>استدعِ المكتبة وحدد الخيارات كما يناسبك:</p>
+                
+                <div class="code-block">
+<span class="tag">&lt;script&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">document</span>.addEventListener(<span class="val">'DOMContentLoaded'</span>, () => {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">const</span> myScrol = <span class="tag">new</span> Scrol({<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">container</span>: <span class="val">'#main-container'</span>, <span class="comment">// الوعاء الرئيسي</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">selector</span>: <span class="val">'section'</span>,          <span class="comment">// وسم الأقسام</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">effect</span>: <span class="val">'slide'</span>,              <span class="comment">// التأثير المفضل لك</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">duration</span>: <span class="val">1000</span>                <span class="comment">// المدة بالميلي ثانية</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+<span class="tag">&lt;/script&gt;</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- القسم 6: التأثيرات المتاحة -->
+        <section class="scrol-section">
+            <div class="content-box">
+                <h2>التأثيرات المتاحة (Effects)</h2>
+                <p>يمكنك إضفاء لمسة سحرية على موقعك باختيار أحد التأثيرات التالية عند تهيئة المكتبة في خيار `effect`:</p>
+                
+                <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #60a5fa; font-family: monospace; font-size: 1.5rem;">'slide'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">انزلاق عمودي</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #60a5fa; font-family: monospace; font-size: 1.5rem;">'fade'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">تلاشي سلس</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #60a5fa; font-family: monospace; font-size: 1.5rem;">'zoom'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">تكبير وتصغير</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #f472b6; font-family: monospace; font-size: 1.5rem;">'cube'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">دوران مكعب 3D</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #f472b6; font-family: monospace; font-size: 1.5rem;">'flip'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">انقلاب البطاقة 3D</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #f472b6; font-family: monospace; font-size: 1.5rem;">'scale-rotate'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">دوران مع تصغير</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #34d399; font-family: monospace; font-size: 1.5rem;">'bounce'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">وثب مرن</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #34d399; font-family: monospace; font-size: 1.5rem;">'swing'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">تأرجح 3D</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #34d399; font-family: monospace; font-size: 1.5rem;">'spin-out'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">دوران لولبي</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center; padding: 15px;">
+                        <h3 style="color: #f472b6; font-family: monospace; font-size: 1.5rem;">'door'</h3>
+                        <p style="font-size: 1rem; margin-bottom: 0;">فتح الباب</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- القسم 7: المطور -->
+        <section class="scrol-section">
+            <div class="author-card">
+                <div class="author-avatar-wrapper">
+                    <!-- يرجى وضع صورتك الشخصية باسم imad.jpg في نفس المجلد -->
+                    <img src="imad.png" alt="Imad Touzouz">
+                </div>
+                <div style="color: #64748b; font-size: 0.9rem; margin-bottom: 5px;">تم تصميم وتطوير هذه المكتبة بواسطة</div>
+                <div class="author-name">Imad Touzouz</div>
+                <div class="author-title">المؤسس ومطور الويب</div>
+                <div class="author-desc">
+                    مطور ويب شامل ومؤسس المنصة، متخصص في تصميم وتطوير واجهات المستخدم المتقدمة وأنظمة الواجهة الخلفية القوية لضمان أفضل تجربة تعليمية.
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="social-btn"><i class="fas fa-globe"></i></a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="scrol.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // تفعيل المكتبة للتوثيق بتأثير السلايد الأساسي ليكون مريحاً للقراءة
+            const docsScrol = new Scrol({
+                container: '#main-container',
+                selector: 'section',
+                effect: 'slide',
+                duration: 800
+            });
+
+            // ربط النقاط الجانبية (Dots) بالفهرس لمعرفة أين نحن
+            // سنقوم بإضافة مستمع لأحداث دوران العجلة والأسهم لتحديث النقاط
+            const dots = document.querySelectorAll('.dot');
+            
+            function updateDots() {
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[docsScrol.currentSectionIndex].classList.add('active');
+            }
+
+            // لنجعل التحديث يعمل بعد كل حركة
+            window.addEventListener('wheel', () => setTimeout(updateDots, 100));
+            window.addEventListener('keydown', () => setTimeout(updateDots, 100));
+            window.addEventListener('touchend', () => setTimeout(updateDots, 100));
+        });
+    </script>
+</body>
+</html>
